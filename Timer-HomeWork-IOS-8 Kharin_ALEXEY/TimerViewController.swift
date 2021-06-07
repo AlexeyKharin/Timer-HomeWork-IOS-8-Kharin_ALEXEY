@@ -1,4 +1,4 @@
-//
+
 //  TimerViewController.swift
 //  Timer-HomeWork-IOS-8 Kharin_ALEXEY
 //
@@ -25,6 +25,9 @@ class TimerViewController: UIViewController {
         label.backgroundColor = .white
         return label
     }()
+    
+    deinit { print("деинициализация") }
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         timerLabel.frame = CGRect(
@@ -36,9 +39,10 @@ class TimerViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) {_ in
-            self.count += 1
-            self.timerLabel.text = String(self.count)
+        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let strongself = self else { return }
+            strongself.count += 1
+            strongself.timerLabel.text = String(strongself.count)
         }
         RunLoop.current.add(timer, forMode: .default)
     }
